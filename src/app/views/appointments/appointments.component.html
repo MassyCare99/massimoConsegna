@@ -1,0 +1,13 @@
+<mat-card>
+  <mat-drawer-container class="example-container" [hasBackdrop]="false">
+    <mat-drawer #drawer mode="side" position="end">
+      <mc-appointments-select-date [dateDisponibili]="(daysWithSlots$|async)"
+        (ritornaSlotSelezionato)="ritornaSlotSelezionato($event)"></mc-appointments-select-date>
+      <mc-leaflet [coords]="(getCoords$|async)"></mc-leaflet>
+    </mat-drawer>
+    <mat-drawer-content>
+      <mc-appointments-list (ritornaSelezionato)="selezionaSede($event)" [sedi]="(locations$|async)">
+      </mc-appointments-list>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</mat-card>

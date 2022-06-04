@@ -1,0 +1,165 @@
+<form class="example-form" [formGroup]="form" (submit)="save()">
+
+  <mat-form-field class="taxesText" appearance="fill">
+    <mat-label>codiceFiscale</mat-label>
+    <input matInput placeholder="Codice Fiscale" value="" formControlName="codiceFiscale">
+  </mat-form-field>
+
+  <mat-form-field class="taxesText" appearance="fill">
+    <mat-label>cognome</mat-label>
+    <input matInput placeholder="cognome" value="" formControlName="cognome">
+  </mat-form-field>
+
+  <mat-form-field class="taxesText" appearance="fill">
+    <mat-label>nome</mat-label>
+    <input matInput placeholder="Nome" value="" formControlName="nome">
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill" class="taxesText">
+    <mat-label>dataDiNascita</mat-label>
+    <input matInput [matDatepicker]="picker" placeholder="Data Nascita" formControlName="dataDiNascita">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="taxesText">
+    <mat-label>sesso</mat-label>
+    <mat-select formControlName="sesso">
+      <mat-option value="maschio">
+        Maschio
+      </mat-option>
+      <mat-option value="femmina">
+        Femmina
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+  <mat-form-field class="taxesText" appearance="fill">
+    <mat-label>provinciaDiNascita</mat-label>
+    <input matInput placeholder="Provincia Nascita" value="" formControlName="provinciaDiNascita"
+      [matAutocomplete]="prov">
+
+    <mat-autocomplete #prov="matAutocomplete">
+      <mat-option *ngFor="let provincia of provincie$|async" [value]="provincia.nome">
+        {{provincia.nome}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field class="taxesText" appearance="fill">
+    <mat-label>comuneDiNascita</mat-label>
+    <input matInput placeholder="Comune Nascita" value="" formControlName="comuneDiNascita" [matAutocomplete]="auto">
+
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let comune of comuni$|async" [value]="comune.nome">
+        {{comune.nome}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <br><br>
+  <h1>Erario</h1>
+
+  <button (click)="addErario()" type="button" mat-fab color="primary"
+    aria-label="Example icon button with a bookmark icon">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+
+
+  <div formArrayName="erario">
+    <!--<div *ngFor="let voc of myForm.erario ; let i = index" [formGroupName]="i">-->
+    <div *ngFor="let voc of myErario.controls ; let i = index" [formGroupName]="i">
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>codiceTributo</mat-label>
+        <input matInput placeholder="Codice Tributo" type="input" formControlName="codiceTributo" value="">
+      </mat-form-field>
+
+
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>anno</mat-label>
+        <input matInput placeholder="Anno" formControlName="anno" value="">
+      </mat-form-field>
+
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>debito</mat-label>
+        <input matInput placeholder="Debito" formControlName="debito" value="">
+      </mat-form-field>
+
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>credito</mat-label>
+        <input matInput placeholder="Credito" formControlName="credito" value="">
+      </mat-form-field>
+
+      <button mat-fab color="primary" type="button" (click)="removeErario(i)"
+        aria-label="Example icon button with a delete icon">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="myErario.controls.length>0">
+      Credito:{{totaliErarioCredito$|async}} €
+      <br>
+      Debito:{{totaliErarioDebito$|async}}€
+    </div>
+  </div>
+
+  <br>
+  <h1>Inps</h1>
+  <button (click)="addInps()" type="button" mat-fab color="primary"
+    aria-label="Example icon button with a bookmark icon">
+    <mat-icon>add_circle</mat-icon>
+  </button>
+
+  <div formArrayName="inps">
+    <div *ngFor="let voc of myInps.controls ; let i = index" [formGroupName]="i">
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>codice Sede</mat-label>
+        <input matInput placeholder="Codice Sede" value="" formControlName="codiceSede">
+      </mat-form-field>
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>causale Contributo</mat-label>
+        <input matInput placeholder="causale Contributo" value="" formControlName="causaleContributo">
+      </mat-form-field>
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>codiceInps</mat-label>
+        <input matInput placeholder="Codice INPS" value="" formControlName="codiceInps">
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" class="taxesText">
+        <mat-label>da</mat-label>
+        <input matInput [matDatepicker]="da" placeholder="da" formControlName="da" [errorStateMatcher]="inpsMatcher">
+        <mat-datepicker-toggle matSuffix [for]="da"></mat-datepicker-toggle>
+        <mat-datepicker #da></mat-datepicker>
+        <mat-error *ngIf="voc.hasError('inps')">{{voc.getError("inps")}}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="taxesText">
+        <mat-label>a</mat-label>
+        <input matInput [matDatepicker]="a" placeholder="a" formControlName="a" [errorStateMatcher]="inpsMatcher">
+        <mat-datepicker-toggle matSuffix [for]="a"></mat-datepicker-toggle>
+        <mat-datepicker #a></mat-datepicker>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>debito</mat-label>
+        <input matInput placeholder="Debito" formControlName="debito" value="">
+      </mat-form-field>
+      <mat-form-field class="taxesText" appearance="fill">
+        <mat-label>credito</mat-label>
+        <input matInput placeholder="Credito" formControlName="credito" value="">
+      </mat-form-field>
+
+      <button mat-fab color="primary" (click)="removeInps(i)" aria-label="Example icon button with a delete icon">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="myInps.controls.length>0">
+      Credito:{{totaliInpsCredito$|async}} €
+      <br>
+      Debito:{{totaliInpsDebito$|async}}€
+    </div>
+  </div>
+  <br><br>
+  <h2>Totale</h2>{{totale$|async}}
+  <br><br>
+  <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Salva</button>
+</form>

@@ -1,0 +1,25 @@
+
+<mat-expansion-panel (opened)="panelOpenState = true"
+                     (closed)="panelOpenState = false">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="timestamp">
+        [{{timestamp | date:'dd/MM/yyyy'}}]
+      </div>
+      <div class="ammount" [style.color]=" type == 'in' ? 'green' : 'red'">
+        € {{ammount}}
+      </div>
+      <div>
+        {{title}}
+      </div>
+
+
+    </mat-panel-title>
+    <mat-panel-description>
+
+      {{description | truncate :panelOpenState}}
+
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  {{description}}
+</mat-expansion-panel>

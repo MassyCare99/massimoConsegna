@@ -1,0 +1,27 @@
+<form #f="ngForm" (ngSubmit)="save(f.value)">
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>person</mat-icon>&nbsp;Email
+    </mat-label>
+    <input matInput email [ngModel] placeholder="email" name="email" required />
+  </mat-form-field>
+  <br>
+
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>lock_outline</mat-icon>&nbsp;password
+    </mat-label>
+    <input matInput [ngModel] [type]="hide ? 'password' : 'text'" placeholder="password" name="password" required />
+    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Nascondi password'"
+      [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+  <br>
+  <button mat-flat-button color="primary" type="submit" [disabled]="f.invalid">Accedi</button>
+  <br>
+  <br />
+  <button routerLink="./../register" mat-button color="primary">
+    Crea un nuovo account
+  </button>
+</form>

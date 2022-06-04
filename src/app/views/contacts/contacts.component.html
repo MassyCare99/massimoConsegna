@@ -1,0 +1,15 @@
+<ng-container *ngIf="state$.getValue().type == 'list'">
+  <mc-contact-list [contatti]="contacts$|async" (elimina)="eliminaContatto($event)"
+    (modifica)="modificaContatto($event)" (seleziona)="selezionaContatto($event)"></mc-contact-list>
+  <button mat-flat-button color="primary" class="fullWidth" (click)="nuovoContatto()">Nuovo Contatto</button>
+  <br><br>
+  <button mat-stroked-button color="warn" class="fullWidth" (click)="chiudiModale()">Annulla</button>
+</ng-container>
+
+<ng-container *ngIf="state$.getValue().type === 'new' || state$.getValue().type === 'edit'">
+  <mc-contact-form (salvaContatto)="salvaContatto($event)" [contattoSelezionato]="selectedContact$|async">
+  </mc-contact-form>
+  <br>
+  <button mat-stroked-button color="warn" class="fullWidth" (click)="state$.next({type:'list'})">Annulla</button>
+
+</ng-container>

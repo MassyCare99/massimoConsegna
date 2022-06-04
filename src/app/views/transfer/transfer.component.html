@@ -1,0 +1,52 @@
+<mat-card style="text-align: center;">
+  <div style="width: 70%;max-width: 300px; display: inline-block;">
+    <button mat-flat-button color="primary" class="fullWidth" (click)="openContact()">
+      Lista Contatti
+    </button>
+    <br /><br>
+    <form #f="ngForm" (ngSubmit)="save(f.value)" transfer>
+      <mat-form-field appearance="fill" class="fullWidth">
+        <mat-label>Nome</mat-label>
+        <input matInput [ngModel]="contattoSelezionato?.name" name="name" #nome="ngModel" required placeholder="Nome" />
+        <mat-error *ngIf="nome.invalid">Nome Richiesto</mat-error>
+      </mat-form-field>
+      <br />
+      <mat-form-field appearance="fill" class="fullWidth">
+        <mat-label>Cognome</mat-label>
+        <input matInput [ngModel]="contattoSelezionato?.surname" name="surname" #cognome="ngModel" required
+          placeholder="Cognome" />
+      </mat-form-field>
+      <br />
+      <mat-form-field appearance="fill" class="fullWidth">
+        <mat-label>Iban</mat-label>
+        <input matInput iban [ngModel]="contattoSelezionato?.iban" name="iban" #iban="ngModel" required
+          placeholder="=Iban" />
+        <mat-error *ngIf="iban.errors?.['noIban']">{{iban.errors?.['noIban']}}</mat-error>
+      </mat-form-field>
+
+      <br />
+      <mat-form-field appearance="fill" class="fullWidth">
+        <mat-label>Importo</mat-label>
+        <input matInput amount [ngModel] name="amount" #importo="ngModel" required placeholder="Importo" />
+      </mat-form-field>
+      <mat-error *ngIf="f.errors?.['noAmount']">{{f.errors?.['noAmount']}}</mat-error>
+      <br />
+      <mat-form-field appearance="fill" class="fullWidth">
+        <mat-label>Seleziona una Carta</mat-label>
+        <mat-select [ngModel] name="cardId" #cardId="ngModel" required="" cardId>
+          <mat-option *ngFor="let carta of cards$|async" [value]="carta._id">
+            {{ carta.number }}
+          </mat-option>
+          <!-- <mat-option value="ninja">
+          ninja
+        </mat-option> -->
+        </mat-select>
+        <mat-error *ngIf="cardId.errors?.['noCard']">{{cardId.errors?.['noCard']}}</mat-error>
+      </mat-form-field>
+      <br />
+      <button mat-flat-button color="primary" class="fullWidth" [disabled]="f.invalid" type="submit">
+        Trasferisci Denaro
+      </button>
+    </form>
+  </div>
+</mat-card>

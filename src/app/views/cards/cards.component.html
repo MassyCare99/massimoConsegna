@@ -1,0 +1,13 @@
+<mat-drawer-container style="height: 450px" class="example-container" [hasBackdrop]="false">
+  <mat-drawer #drawer mode="side" position="end">
+    <mc-card-form #cardForm (esci)="toogle()" (inserisciNuovaCarta)="addNew($event)"></mc-card-form>
+
+  </mat-drawer>
+  <mat-drawer-content>
+
+    <mc-card-list [cards]="cards$ | async" (elimina)="deleteCard($event)"
+      (vediDettaglio)="vediDettaglioMovimenti($event)" (aggiungiNuovo)="toogle()"></mc-card-list>
+
+  </mat-drawer-content>
+
+</mat-drawer-container>

@@ -1,0 +1,15 @@
+<mat-form-field appearance="fill">
+  <mat-label>Scegli una Data</mat-label>
+  <input placeholder="Data" (dateInput)="dataCambiata($event)" matInput [matDatepicker]="picker"
+    [matDatepickerFilter]="calendarFilter" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
+
+<mat-selection-list #shoes [multiple]="false" *ngIf="dataSelezionata">
+  <div mat-subheader>Orari Disponibili</div>
+  <mat-list-option *ngFor="let slot of dataSelezionata.slots" (click)="oraSelezionata(slot)">
+    <mat-icon mat-list-icon>schedule</mat-icon>
+    <div mat-line>{{ slot }}</div>
+  </mat-list-option>
+</mat-selection-list>

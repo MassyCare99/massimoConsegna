@@ -1,0 +1,11 @@
+<mat-selection-list #shoes [multiple]="false">
+  <div mat-subheader>Folders</div>
+  <mat-list-option
+    *ngFor="let sede of sedi"
+    (click)="ritornaSelezionato.emit(sede._id)"
+  >
+    <mat-icon mat-list-icon>apartment</mat-icon>
+    <div mat-line>{{ sede.name }}</div>
+    <div mat-line>{{ sede.address }}</div>
+  </mat-list-option>
+</mat-selection-list>

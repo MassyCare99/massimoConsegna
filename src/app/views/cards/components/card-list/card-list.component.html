@@ -1,0 +1,20 @@
+<mat-card class="ListCard">
+
+  <mat-list>
+    <div mat-subheader>Carte</div>
+    <mat-list-item *ngFor="let card of cards">
+      <mat-icon mat-list-icon>payment</mat-icon>
+      <div mat-line>{{card.number}}</div>
+      <div mat-line>€ {{card.amount}} - {{card.type}} </div>
+      <div style="float:right">
+        <button mat-icon-button (click)="vediDettaglio.emit(card._id)" matTooltip="Vedi movimenti">
+          <mat-icon mat-list-icon>receipt_long</mat-icon>
+        </button>
+        <button mat-icon-button (click)="elimina.emit(card._id)" matTooltip="Elimina">
+          <mat-icon mat-list-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+  <button mat-flat-button color="primary" (click)="aggiungiNuovo.emit()" class="fullWidth">Aggiungi una Carta</button>
+</mat-card>

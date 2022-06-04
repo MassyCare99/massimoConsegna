@@ -1,0 +1,23 @@
+<mat-card>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Seleziona una Carta</mat-label>
+    <mat-select (selectionChange)="changeCard($event.value)" [ngModel]="selectedCardId$|async">
+      <mat-option *ngFor="let carta of cards$ |async" [value]="carta._id">
+        {{carta.number}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="selectedCardId$|async">
+    Saldo: €{{(selectedCard$|async)?.amount}}
+  </div>
+
+  <div *ngFor="let move of (movements$|async) ; let i=index " class="panelList">
+    <mc-movement [description]="move.description" [ammount]="move.amount" [timestamp]="move.timestamp"
+      [title]="move.title" [type]="move.type"></mc-movement>
+  </div>
+  <br>
+  <button type="button" mat-flat-button color="primary" *ngIf="shouldLoadMore$|async" (click)="showMore()"
+    style="width:100%">Mostra altri</button>
+
+</mat-card>

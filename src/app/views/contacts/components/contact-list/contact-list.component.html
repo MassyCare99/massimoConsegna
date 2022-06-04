@@ -1,0 +1,29 @@
+<mat-form-field class="fullWidth" appearance="fill">
+  <mat-label>Cerca</mat-label>
+  <input matInput placeholder="Cerca" #cerca [(ngModel)]="valueText" />
+  <button *ngIf="cerca.value" matSuffix mat-icon-button aria-label="Clear" (click)="valueText = ''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+<br />
+
+<mat-list *ngIf="contatti">
+  <div mat-subheader>Contatti</div>
+  <!--<mat-list-item *ngFor="let contact of contacts | filter:???">-->
+  <mat-list-item *ngFor="let contatto of contatti | filter: cerca.value">
+    <mat-icon mat-list-icon>account_circle</mat-icon>
+    <div mat-line>{{ contatto.name }} {{ contatto.surname }}</div>
+    <div mat-line>{{ contatto.iban }}</div>
+    <div style="float: right">
+      <button (click)="seleziona.emit(contatto._id)" mat-icon-button aria-label="">
+        <mat-icon>done</mat-icon>
+      </button>
+      <button (click)="modifica.emit(contatto._id)" mat-icon-button aria-label="">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button (click)="elimina.emit(contatto._id)" mat-icon-button aria-label="">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </mat-list-item>
+</mat-list>

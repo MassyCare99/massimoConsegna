@@ -1,0 +1,63 @@
+<form #f="ngForm" (ngSubmit)="register(f.value)" equalField>
+
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>alternate_email</mat-icon>&nbsp;Email
+    </mat-label>
+    <input matInput [ngModel] email name="email" #email="ngModel" required placeholder="email" />
+    <mat-error *ngIf="email.invalid">Email Richiesta</mat-error>
+  </mat-form-field>
+  <br />
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>person</mat-icon>&nbsp;Nome
+    </mat-label>
+    <input matInput [ngModel] name="name" #nome="ngModel" required placeholder="nome" />
+    <mat-error *ngIf="nome.invalid">Nome Richiesto</mat-error>
+  </mat-form-field>
+  <br />
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>person</mat-icon>&nbsp;Cognome
+    </mat-label>
+    <input matInput [ngModel] name="surname" #cognome="ngModel" required placeholder="Cognome" />
+    <mat-error *ngIf="cognome.invalid">Cognome Richiesto</mat-error>
+  </mat-form-field>
+  <br />
+
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>lock_outline</mat-icon>&nbsp;password
+    </mat-label>
+    <input matInput [ngModel] [type]="hide ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher"
+      placeholder="password" name="password" #password="ngModel" required />
+    <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Nascondi password'"
+      [attr.aria-pressed]="hide">
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+    <mat-error *ngIf="password.invalid">Password Richiesta</mat-error>
+  </mat-form-field>
+  <br />
+
+  <mat-form-field appearance="fill">
+    <mat-label>
+      <mat-icon>lock_outline</mat-icon>&nbsp;Conferma password
+    </mat-label>
+    <input matInput [ngModel] [type]="hide2 ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher"
+      placeholder="conferma password" name="password2" required #password2="ngModel" />
+    <button type="button" mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Nascondi password'"
+      [attr.aria-pressed]="hide2">
+      <mat-icon>{{ hide2 ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+    <mat-error *ngIf="password2.invalid">Password Richiesta</mat-error>
+    <mat-error *ngIf="!password2.invalid && f.errors?.['notEqual']">{{f.errors?.['notEqual']}}</mat-error>
+  </mat-form-field>
+  <br>
+  <br />
+  <button mat-flat-button color="primary" type="submit" [disabled]="f.invalid">Registrati</button>
+  <br />
+  <br />
+  <button routerLink="./../signIn" mat-button color="primary">
+    Hai già un account? Accedi
+  </button>
+</form>

@@ -1,0 +1,20 @@
+<form #f="ngForm" (ngSubmit)="salva(f.value)">
+
+  <mat-form-field class="fullWidth" appearance="fill">
+    <mat-label>Nome</mat-label>
+    <input matInput required [ngModel]="contattoSelezionato?.name" name="name" placeholder="Nome">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="fullWidth" appearance="fill">
+    <mat-label>Cognome</mat-label>
+    <input matInput required [ngModel]="contattoSelezionato?.surname" name="surname" placeholder="Cognome">
+  </mat-form-field>
+  <br>
+  <mat-form-field class="fullWidth" appearance="fill">
+    <mat-label>IBAN</mat-label>
+    <input matInput iban required #iban="ngModel" [ngModel]="contattoSelezionato?.iban" placeholder="IBAN" name="iban">
+    <mat-error *ngIf="iban.errors?.['noIban']">{{iban.errors?.['noIban']}}</mat-error>
+  </mat-form-field>
+  <br>
+  <button mat-flat-button color="primary" class="fullWidth" type="submit" [disabled]="f.invalid">Salva</button>
+</form>

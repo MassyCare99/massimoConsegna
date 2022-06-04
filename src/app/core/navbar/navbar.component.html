@@ -1,0 +1,30 @@
+<mat-selection-list #shoes [multiple]="false">
+  <mat-list-option routerLink="home" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>home</mat-icon>
+    <div mat-line>Home</div>
+  </mat-list-option>
+  <mat-list-option routerLink="cards" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>credit_card</mat-icon>
+    <div mat-line>Carte</div>
+  </mat-list-option>
+  <mat-list-option routerLink="movements" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>receipt_long</mat-icon>
+    <div mat-line>Movimenti</div>
+  </mat-list-option>
+  <mat-list-option routerLink="transfer" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>paid</mat-icon>
+    <div mat-line>Trasferisci</div>
+  </mat-list-option>
+  <mat-list-option routerLink="appointments" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>event</mat-icon>
+    <div mat-line>Appuntamenti</div>
+  </mat-list-option>
+  <mat-list-option routerLink="taxes" routerLinkActive="mat-list-single-selected-option">
+    <mat-icon mat-list-icon>summarize</mat-icon>
+    <div mat-line>Tasse</div>
+  </mat-list-option>
+  <mat-list-option (click)="logOut()">
+    <mat-icon mat-list-icon>logout</mat-icon>
+    <div mat-line>LogOut <br>{{userStore.displayName$| async }}</div>
+  </mat-list-option>
+</mat-selection-list>
