@@ -4,7 +4,7 @@
       Lista Contatti
     </button>
     <br /><br>
-    <form #f="ngForm" (ngSubmit)="save(f.value)" transfer>
+    <form #f="ngForm" (ngSubmit)="save(f)" transfer>
       <mat-form-field appearance="fill" class="fullWidth">
         <mat-label>Nome</mat-label>
         <input matInput [ngModel]="contattoSelezionato?.name" name="name" #nome="ngModel" required placeholder="Nome" />
@@ -15,12 +15,13 @@
         <mat-label>Cognome</mat-label>
         <input matInput [ngModel]="contattoSelezionato?.surname" name="surname" #cognome="ngModel" required
           placeholder="Cognome" />
+        <mat-error> Cognome Richiesto</mat-error>
       </mat-form-field>
       <br />
       <mat-form-field appearance="fill" class="fullWidth">
         <mat-label>Iban</mat-label>
         <input matInput iban [ngModel]="contattoSelezionato?.iban" name="iban" #iban="ngModel" required
-          placeholder="=Iban" />
+          placeholder="Iban" />
         <mat-error *ngIf="iban.errors?.['noIban']">{{iban.errors?.['noIban']}}</mat-error>
       </mat-form-field>
 
@@ -28,6 +29,7 @@
       <mat-form-field appearance="fill" class="fullWidth">
         <mat-label>Importo</mat-label>
         <input matInput amount [ngModel] name="amount" #importo="ngModel" required placeholder="Importo" />
+        <mat-error *ngIf="importo.errors?.['required']">Importo Obbligatorio</mat-error>
       </mat-form-field>
       <mat-error *ngIf="f.errors?.['noAmount']">{{f.errors?.['noAmount']}}</mat-error>
       <br />
@@ -44,9 +46,10 @@
         <mat-error *ngIf="cardId.errors?.['noCard']">{{cardId.errors?.['noCard']}}</mat-error>
       </mat-form-field>
       <br />
-      <button mat-flat-button color="primary" class="fullWidth" [disabled]="f.invalid" type="submit">
+      <button mat-flat-button color="primary" class="fullWidth" [disabled]="!f.valid" type="submit">
         Trasferisci Denaro
       </button>
+
     </form>
   </div>
 </mat-card>

@@ -32,9 +32,6 @@ export class RegisterComponent implements OnInit {
       name: value.name,
       surname: value.surname,
     };
-    console.log(cred);
-    this.authService.register(cred).subscribe((res) => {
-      console.log(res);
-    });
+    this.authService.register(cred).subscribe((res) => {});
   }
 }

@@ -1,9 +1,7 @@
 import { Comune, Provincia2 } from '../../models/comune';
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { map, Observable, tap, catchError, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +16,15 @@ export class ComuniService {
       )
       .pipe(
         map((list) => {
-          const newList = list.filter((comune) => {
-            return comune.nome.toUpperCase().startsWith(ricStr.toUpperCase());
-          });
-          return newList;
-        })
+          if (ricStr) {
+            const newList = list.filter((comune) => {
+              return comune.nome.toUpperCase().startsWith(ricStr.toUpperCase());
+            });
+            return newList;
+          }
+          return [];
+        }),
+        catchError((r) => of([]))
       );
   }
 
@@ -33,18 +35,22 @@ export class ComuniService {
       )
       .pipe(
         map((list) => {
-          const newList = list.filter((comune) => {
-            const condizione = comune.nome
-              .toUpperCase()
-              .startsWith(ricStr.toUpperCase());
+          if (ricStr) {
+            const newList = list.filter((comune) => {
+              const condizione = comune.nome
+                .toUpperCase()
+                .startsWith(ricStr.toUpperCase());
 
-            if (condizione) {
-              return true;
-            }
-            return false;
-          });
-          return newList;
-        })
+              if (condizione) {
+                return true;
+              }
+              return false;
+            });
+            return newList;
+          }
+          return [];
+        }),
+        catchError((r) => of([]))
       );
   }
 }

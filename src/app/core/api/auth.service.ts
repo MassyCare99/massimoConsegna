@@ -14,7 +14,6 @@ import {
 } from 'rxjs';
 import { UserStore } from '../user.store';
 import { User } from 'src/app/models/user';
-import { Credentials } from 'src/app/models/credential';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +28,6 @@ export class AuthService {
   }
 
   register(credentials: any): Observable<boolean> {
-    console.log(credentials);
     let res = this.httpClient
       .post<void>(`${env.apiUrl}/register`, credentials)
       .subscribe((res) => {

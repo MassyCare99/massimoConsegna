@@ -1,18 +1,24 @@
-<form class="example-form" [formGroup]="form" (submit)="save()">
+<form class="example-form" [formGroup]="form" (submit)="save()" #formM="ngForm">
 
   <mat-form-field class="taxesText" appearance="fill">
     <mat-label>codiceFiscale</mat-label>
     <input matInput placeholder="Codice Fiscale" value="" formControlName="codiceFiscale">
+    <mat-error *ngIf="form.get('codiceFiscale')?.errors &&
+            form.get('codiceFiscale')?.hasError('required')">Codice Obbligatorio</mat-error>
+    <mat-error *ngIf="form.get('codiceFiscale')?.errors &&
+            !form.get('codiceFiscale')?.hasError('required') && form.get('codiceFiscale')?.hasError('nocodFiscale')">
+      Codice Fiscale nel formato non corretto</mat-error>
   </mat-form-field>
-
   <mat-form-field class="taxesText" appearance="fill">
     <mat-label>cognome</mat-label>
     <input matInput placeholder="cognome" value="" formControlName="cognome">
+    <mat-error>Cognome Obbligatorio </mat-error>
   </mat-form-field>
 
   <mat-form-field class="taxesText" appearance="fill">
     <mat-label>nome</mat-label>
     <input matInput placeholder="Nome" value="" formControlName="nome">
+    <mat-error>Nome Obbligatorio </mat-error>
   </mat-form-field>
   <br>
   <mat-form-field appearance="fill" class="taxesText">
@@ -20,6 +26,7 @@
     <input matInput [matDatepicker]="picker" placeholder="Data Nascita" formControlName="dataDiNascita">
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
+    <mat-error>Data nascita Obbligatorio </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="taxesText">
@@ -32,6 +39,7 @@
         Femmina
       </mat-option>
     </mat-select>
+    <mat-error>Sesso Obbligatorio </mat-error>
   </mat-form-field>
   <br>
   <mat-form-field class="taxesText" appearance="fill">
@@ -44,6 +52,7 @@
         {{provincia.nome}}
       </mat-option>
     </mat-autocomplete>
+    <mat-error>Provincia Obbligatoria</mat-error>
   </mat-form-field>
 
   <mat-form-field class="taxesText" appearance="fill">
@@ -55,6 +64,7 @@
         {{comune.nome}}
       </mat-option>
     </mat-autocomplete>
+    <mat-error>Comune Obbligatorio </mat-error>
   </mat-form-field>
 
   <br><br>
@@ -72,12 +82,14 @@
       <mat-form-field class="taxesText" appearance="fill">
         <mat-label>codiceTributo</mat-label>
         <input matInput placeholder="Codice Tributo" type="input" formControlName="codiceTributo" value="">
+        <mat-error>Codice Obbligatorio </mat-error>
       </mat-form-field>
 
 
       <mat-form-field class="taxesText" appearance="fill">
         <mat-label>anno</mat-label>
         <input matInput placeholder="Anno" formControlName="anno" value="">
+        <mat-error>Anno Obbligatorio </mat-error>
       </mat-form-field>
 
       <mat-form-field class="taxesText" appearance="fill">
@@ -88,6 +100,7 @@
       <mat-form-field class="taxesText" appearance="fill">
         <mat-label>credito</mat-label>
         <input matInput placeholder="Credito" formControlName="credito" value="">
+        <mat-error>Credito Obbligatorio </mat-error>
       </mat-form-field>
 
       <button mat-fab color="primary" type="button" (click)="removeErario(i)"
@@ -148,7 +161,8 @@
         <input matInput placeholder="Credito" formControlName="credito" value="">
       </mat-form-field>
 
-      <button mat-fab color="primary" (click)="removeInps(i)" aria-label="Example icon button with a delete icon">
+      <button mat-fab color="primary" type="button" (click)="removeInps(i)"
+        aria-label="Example icon button with a delete icon">
         <mat-icon>delete</mat-icon>
       </button>
     </div>
@@ -158,8 +172,14 @@
       Debito:{{totaliInpsDebito$|async}}€
     </div>
   </div>
-  <br><br>
-  <h2>Totale</h2>{{totale$|async}}
+
+  <div class="pannelloTotale" *ngIf="totale$|async">
+    <mat-chip-list class="mat-chip-list-stacked" aria-label="Color selection">
+      <mat-chip selected color="primary">
+        <h2 style="margin-top:16px">Totale €{{totale$|async}}</h2>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
   <br><br>
   <button type="submit" mat-raised-button color="primary" [disabled]="!form.valid">Salva</button>
 </form>

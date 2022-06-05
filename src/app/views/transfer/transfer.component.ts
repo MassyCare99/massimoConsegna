@@ -1,3 +1,4 @@
+import { NgForm } from '@angular/forms';
 import { TransferService } from '../../core/api/transfer.service';
 import { CardsService } from '../../core/api/cards.service';
 import { ContactsService } from '../../core/api/contacts.service';
@@ -36,9 +37,10 @@ export class TransferComponent implements OnInit {
     this.getAllCard();
   }
 
-  save(value: Transfer) {
+  save(form: NgForm) {
+    const value: Transfer = form.value;
     let data: ModalYesNoComponentData = {
-      title: `Vuoi procedere con il trasferimento a favore di ${value.name} ${value.surname}
+      title: `Vuoi procedere con il trasferimento a favore di ${value.name}  €${value.surname}
       ${value.amount} ?
     `,
     };
@@ -51,6 +53,8 @@ export class TransferComponent implements OnInit {
         //answer yes
 
         this.transferService.addTransfer(value).subscribe((res) => {
+          form.resetForm();
+
           let snackBarRef = this.snackBar.open(
             'Trasferimento avvenuto con successo',
             '',
@@ -70,6 +74,8 @@ export class TransferComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        //riaggiorno per eventuali modifiche
+        this.getContatti();
         //ritornato selezionato contatto
         let index: number;
         index = this.contatti.findIndex((c) => c._id === result.data);

@@ -17,10 +17,6 @@ export function InpsValidator(
     myform?.controls['da']?.value !== '' &&
     myform?.controls['a']?.value !== ''
   ) {
-    console.log(
-      new Date(myform?.controls['da']?.value) <
-        new Date(myform?.controls['a']?.value)
-    );
     return new Date(myform?.controls['da']?.value) <
       new Date(myform?.controls['a']?.value)
       ? null

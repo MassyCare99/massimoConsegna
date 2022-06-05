@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   hide = true;
+  erroreLogin: string | null = null;
+  psw: string = '';
 
   constructor(public router: Router, private authService: AuthService) {}
 
@@ -24,9 +26,13 @@ export class SignInComponent implements OnInit {
 
   save(value: any) {
     this.authService.login(value.email, value.password).subscribe((res) => {
-      console.log(res);
+      if (res) {
+        this.router.navigate(['dashboard']);
+        this.erroreLogin = null;
+      } else {
+        this.erroreLogin = 'Username o PSW errati';
+        this.psw = '';
+      }
     });
-
-    this.router.navigate(['dashboard']);
   }
 }

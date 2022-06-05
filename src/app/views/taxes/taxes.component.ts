@@ -8,8 +8,14 @@ import {
   debounceTime,
   distinctUntilChanged,
 } from 'rxjs';
-import { Component, OnInit, Pipe } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
+import { Component, OnInit, Pipe, ViewChild } from '@angular/core';
+import {
+  FormGroup,
+  FormBuilder,
+  FormArray,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { CodFiscaleValidator } from 'src/app/shared/validators/codFiscale.validator';
 import { InpsValidator } from 'src/app/shared/validators/inps.validator';
 import { TaxesService } from 'src/app/core/api/taxes.service';
@@ -26,11 +32,21 @@ import { INPSErrorStateMatcher } from './utility/inps.errorStateMatcher';
         margin-left: 10px;
         width: 220px;
       }
+
+      .pannelloTotale {
+        position: sticky;
+        right: 25px;
+        float: right;
+        bottom: 20px;
+        text-align: right;
+      }
     `,
   ],
 })
 export class TaxesComponent implements OnInit {
   form!: FormGroup;
+
+  @ViewChild('formM') formM: any;
 
   constructor(
     private fb: FormBuilder,
@@ -128,10 +144,7 @@ export class TaxesComponent implements OnInit {
   totaliInpsDebito$: Observable<number>;
   totale$: Observable<number>;
 
-  ngOnInit(): void {
-    this.addErario();
-    this.addInps();
-  }
+  ngOnInit(): void {}
 
   addErario() {
     let array = this.form.get('erario') as FormArray;
@@ -145,7 +158,6 @@ export class TaxesComponent implements OnInit {
   }
 
   removeErario(i: number) {
-    console.log(i);
     let array = this.form.get('erario') as FormArray;
     array.removeAt(i);
   }
@@ -188,6 +200,8 @@ export class TaxesComponent implements OnInit {
       array = this.form.get('inps') as FormArray;
       array.clear();
       this.form.reset();
+      //usato il metodo seguente per ripulire gli errori che si generano dopo un .reset()
+      this.formM.resetForm();
       this.form.markAsPristine();
       this.form.markAsUntouched();
     });

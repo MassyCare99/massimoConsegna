@@ -1,7 +1,6 @@
 import { BehaviorSubject, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { ApointmentsService } from '../../core/api/apointments.service';
 import { DayWithSlot } from 'src/app/models/DayWithSlot';
-import { DayWithSlots } from './../../models/DayWithSlots';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Location } from './../../models/Location';
@@ -10,7 +9,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalYesNoComponent } from '../modal-yes-no/modal-yes-no.component';
 import { DatePipe } from '@angular/common';
-import { Coords } from 'leaflet';
 
 @Component({
   selector: 'mc-appointments',
@@ -61,11 +59,8 @@ export class AppointmentsComponent implements OnInit {
   }
 
   selezionaSede(idSede: string) {
-    // const index: number = this.sedi.findIndex((i) => i._id == idSede);
-    // this.sedeSelezionata = this.sedi[index];
     this.selectedLocationId$.next(idSede);
     this.drawer?.open();
-    //this.getSlotsDisponibili();
   }
   toogle() {
     this.drawer?.toggle();
@@ -101,16 +96,6 @@ export class AppointmentsComponent implements OnInit {
       }
     });
   }
-
-  //dateDisponibili: DayWithSlots[] = [];
-
-  // getSlotsDisponibili() {
-  //   this.apointmentsService
-  //     .getSlotsDisponibili(this.sedeSelezionata?._id)
-  //     .subscribe((result) => (this.dateDisponibili = result));
-  // }
-
-  //sedi: Location[] = [];
 
   getLocation() {
     this.apointmentsService.getLocations().subscribe(this.locations$);

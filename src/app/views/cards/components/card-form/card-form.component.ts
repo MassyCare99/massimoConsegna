@@ -1,4 +1,4 @@
-import { Card, cardType } from '../../../../models/card';
+import { cardType } from '../../../../models/card';
 import { NgForm } from '@angular/forms';
 import {
   Component,
@@ -40,6 +40,6 @@ export class CardFormComponent implements OnInit {
   }
 
   public cleanup() {
-    this.form.reset();
+    this.form.resetForm();
   }
 }

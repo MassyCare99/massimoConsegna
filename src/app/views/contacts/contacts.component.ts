@@ -108,6 +108,7 @@ export class ContactsComponent implements OnInit {
         this.contacts$.next([...this.contacts$.getValue(), res]);
       });
     }
+    this.state$.next({ type: 'list' });
   }
 }
 

@@ -15,6 +15,7 @@
               <mat-select required="" name="type" [ngModel]>
                 <mat-option *ngFor="let type of typeCard" [value]="type">{{capitalize(type)}}</mat-option>
               </mat-select>
+              <mat-error>Tipo Carta Obbligatorio</mat-error>
             </mat-form-field>
           </td>
         </tr>
@@ -23,12 +24,14 @@
             <mat-form-field appearance="fill">
               <mat-label>Cognome</mat-label>
               <input matInput [ngModel] name="surname" required placeholder="Cognome" />
+              <mat-error>Cognome Obbligatorio</mat-error>
             </mat-form-field>
           </td>
           <td>
             <mat-form-field appearance="fill">
               <mat-label>Nome</mat-label>
               <input matInput [ngModel] placeholder="Nome" name="name" required />
+              <mat-error>Nome Obbligatorio</mat-error>
             </mat-form-field>
           </td>
         </tr>
@@ -37,6 +40,7 @@
             <mat-form-field appearance="fill">
               <mat-label>N° Carta</mat-label>
               <input maxlength="16" minlength="16" matInput [ngModel] placeholder="N° Carta" name="number" required />
+              <mat-error>N° carta Obbligatorio</mat-error>
             </mat-form-field>
           </td>
         </tr>
@@ -46,6 +50,7 @@
               <mat-label>Codice di Sicurezza</mat-label>
               <input maxlength="3" minlength="3" matInput [ngModel] placeholder="Codice di Sicurezza" name="csc"
                 required />
+              <mat-error>Codice Obbligatorio</mat-error>
             </mat-form-field>
           </td>
         </tr>

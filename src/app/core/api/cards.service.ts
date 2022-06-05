@@ -1,4 +1,3 @@
-import { Movement } from '../../models/movement';
 import { CardForm } from '../../models/CardForm';
 import { Card } from '../../models/card';
 import { HttpClient } from '@angular/common/http';

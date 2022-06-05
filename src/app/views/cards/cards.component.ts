@@ -1,13 +1,15 @@
+import { selectCards } from './store/cards.selectors';
 import { CardsService } from '../../core/api/cards.service';
 import { CardFormComponent } from './components/card-form/card-form.component';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Card } from 'src/app/models/card';
+
 import { CardForm } from 'src/app/models/CardForm';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, filter, map } from 'rxjs';
-import { Route, Router } from '@angular/router';
+
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as Actions from './store/cards.actions';
 
 @Component({
   selector: 'mc-cards',
@@ -27,54 +29,37 @@ export class CardsComponent implements OnInit {
   @ViewChild('drawer') drawer: MatDrawer | null = null;
   @ViewChild('cardForm') cardForm: CardFormComponent | null = null;
 
-  //cards: Card[] = [];
-  cards$ = new BehaviorSubject<Card[]>([]);
+  cards$ = this.store.select(selectCards);
 
   constructor(
     private snackBar: MatSnackBar,
     private cardsService: CardsService,
-    private router: Router
+    private router: Router,
+    public store: Store
   ) {}
-
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'close', {
-      duration: 3000,
-    });
-  }
 
   ngOnInit(): void {
     this.getAllCard();
   }
 
-  addNew(value: CardForm) {
-    this.cardsService.addCards(value).subscribe((res) => {
-      //this.cards = [...this.cards, res];
-      this.cards$.next([...this.cards$.getValue(), res]);
-      this.cleanCardForm();
+  addNew(card: CardForm) {
+    this.store.dispatch(Actions.addCard({ card }));
 
-      this.openSnackBar('Carta aggiunta correttamente!');
-    });
+    this.store.dispatch(
+      Actions.openSnackbar({ message: 'Carta aggiunta correttamente!' })
+    );
   }
 
   deleteCard(idCard: string) {
-    this.cardsService.deleteCard(idCard).subscribe((res) => {
-      if (res) {
-        //let index: number = 0;
-        //index = this.cards.findIndex((e) => e._id === idCard);
-        //this.cards.splice(index, 1);
+    this.store.dispatch(Actions.removeCard({ id: idCard }));
 
-        this.cards$.pipe(
-          map((cards) => cards.find((card) => card._id !== idCard))
-        );
-
-        this.openSnackBar('Carta rimossa correttamente!');
-      }
-    });
+    this.store.dispatch(
+      Actions.openSnackbar({ message: 'Carta rimossa correttamente!' })
+    );
   }
 
   getAllCard(): void {
-    //this.cardsService.getCards().subscribe((result) => (this.cards = result));
-    this.cardsService.getCards().subscribe(this.cards$);
+    this.store.dispatch(Actions.getCards());
   }
 
   toogle() {
