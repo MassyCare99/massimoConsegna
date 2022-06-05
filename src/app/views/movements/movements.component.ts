@@ -1,39 +1,27 @@
-import { CardsService } from '../../core/api/cards.service';
-import { Movement } from './../../models/movement';
 import { HttpClient } from '@angular/common/http';
-import { Card } from './../../models/card';
-import { Component, OnInit } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  map,
-  Observable,
-  shareReplay,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import * as Actions from './store/movements.actions';
+
+import { combineLatest, map, shareReplay, Subscription, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import {
+  selectCards,
+  selectMovements,
+  selectSelectedCardID,
+  selectTotal,
+} from './store/movements.selectors';
 
 @Component({
   selector: 'mc-movements',
   templateUrl: './movements.component.html',
   styles: [],
 })
-export class MovementsComponent implements OnInit {
-  //elencoCarte: Card[] = [];
-  cards$ = new BehaviorSubject<Card[]>([]);
+export class MovementsComponent implements OnInit, OnDestroy {
+  //cards$ = new BehaviorSubject<Card[]>([]);
+  cards$ = this.store.select(selectCards);
 
-  //selectedCardId$ = new BehaviorSubject<string>('');
-  selectedCardId$: Observable<string> = this.route.params.pipe(
-    map((p) => p['cardId']),
-    tap(() => {
-      this.movements$.next([]);
-
-      this.getAllMovements(true);
-    }),
-    shareReplay(1)
-  );
+  selectedCardId$ = this.store.select(selectSelectedCardID);
 
   selectedCard$ = combineLatest([this.cards$, this.selectedCardId$]).pipe(
     map(([cards, id]) => {
@@ -42,13 +30,11 @@ export class MovementsComponent implements OnInit {
     })
   );
 
-  //electedCard: Card | null = null;
-  //visualizzaTastoAltri: boolean = false;
+  //movements$ = new BehaviorSubject<Movement[]>([]);
+  movements$ = this.store.select(selectMovements);
 
-  //listMovements: Movement[] = [];
-  movements$ = new BehaviorSubject<Movement[]>([]);
-
-  total$ = new BehaviorSubject<number>(0);
+  //total$ = new BehaviorSubject<number>(0);
+  total$ = this.store.select(selectTotal);
 
   shouldLoadMore$ = combineLatest([this.movements$, this.total$]).pipe(
     map(([movement, total]) => {
@@ -60,75 +46,52 @@ export class MovementsComponent implements OnInit {
       return false;
     })
   );
-  //numberOfMovementVisible: number = 0;
+
+  subscription = new Subscription();
 
   constructor(
     private http: HttpClient,
-    private cardsService: CardsService,
     private route: ActivatedRoute,
-    private router: Router
-  ) {}
+    private router: Router,
+    public store: Store
+  ) {
+    const sub = this.route.params
+      .pipe(
+        map((p) => p['cardId']),
+        tap((idCard) => {
+          this.store.dispatch(Actions.setCardSelect({ idCard }));
+
+          this.getAllMovements(idCard, true);
+        }),
+        shareReplay(1)
+      )
+      .subscribe();
+
+    this.subscription.add(sub);
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.getAllCard();
   }
 
   changeCard(idCard: string) {
-    //this.selectedCardId$.next(idCard);
     this.router.navigateByUrl('/dashboard/movements/' + idCard);
-    //const index = this.elencoCarte.findIndex((c) => (c._id = idCard));
-    //this.selectedCard = this.elencoCarte[index];
-
-    //this.numberOfMovementVisible = 0;
-    //this.visualizzaTastoAltri = true;
-    //this.movements$.next([]);
-    //this.getAllMovements();
   }
 
   showMore() {
-    this.getAllMovements(false);
+    this.store.dispatch(Actions.getMovements({ clear: false }));
   }
 
   getAllCard(): void {
-    // this.cardsService
-    //   .getCards()
-    //   .subscribe((result) => (this.elencoCarte = result));
-    this.cardsService.getCards().subscribe(this.cards$);
+    this.store.dispatch(Actions.getCards());
   }
 
-  getAllMovements(clear: boolean): void {
-    const stepMovementVisible: number = 5;
-    let offset = 0;
-    if (clear) {
-      offset = 0;
-    } else {
-      offset = this.movements$.getValue().length;
-    }
+  getAllMovements(idCard: string, clear: boolean): void {
     if (this.selectedCard$) {
-      this.selectedCardId$
-        .pipe(
-          switchMap((id) => {
-            return this.cardsService.getMovements(
-              id,
-              stepMovementVisible,
-              offset
-            );
-          })
-        )
-        .subscribe((res) => {
-          if (clear) {
-            this.movements$.next(res.data);
-          } else {
-            this.movements$.next([...this.movements$.getValue(), ...res.data]);
-          }
-
-          this.total$.next(res.total);
-
-          //if (res.length < stepMovementVisible) {
-          //  this.visualizzaTastoAltri = false;
-          //}
-          //this.numberOfMovementVisible =            this.numberOfMovementVisible + this.stepMovementVisible;
-        });
+      this.store.dispatch(Actions.getMovements({ clear }));
     }
   }
 }

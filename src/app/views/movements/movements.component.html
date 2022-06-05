@@ -8,9 +8,18 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <div *ngIf="selectedCardId$|async">
-    Saldo: €{{(selectedCard$|async)?.amount}}
-  </div>
+  <table style="width: 100%;" *ngIf="selectedCardId$|async">
+    <tr>
+      <td>
+        <div>
+          Saldo: €{{(selectedCard$|async)?.amount}}
+        </div>
+      </td>
+      <td>
+        <div style="text-align:right;">Visualizzati {{(movements$ |async)?.length}} di {{total$|async}} movimenti</div>
+      </td>
+    </tr>
+  </table>
 
   <div *ngFor="let move of (movements$|async) ; let i=index " class="panelList">
     <mc-movement [description]="move.description" [ammount]="move.amount" [timestamp]="move.timestamp"

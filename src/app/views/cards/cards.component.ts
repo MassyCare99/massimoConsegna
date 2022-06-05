@@ -48,6 +48,7 @@ export class CardsComponent implements OnInit {
     this.store.dispatch(
       Actions.openSnackbar({ message: 'Carta aggiunta correttamente!' })
     );
+    this.toogle();
   }
 
   deleteCard(idCard: string) {
